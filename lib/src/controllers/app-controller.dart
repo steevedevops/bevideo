@@ -1,12 +1,11 @@
-import 'package:bestapp_package/bestapp_package.dart';
+import 'package:bevideo/assets/styles/colors.dart';
+import 'package:bevideo/assets/styles/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:setgo/assets/styles/colors.dart';
-import 'package:setgo/assets/styles/style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppController extends ChangeNotifier{
-  
   AppController(){
     checkTheme();
   }
@@ -32,8 +31,8 @@ class AppController extends ChangeNotifier{
       prefs.setString("theme", c).then((val){
         SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor: c == "dark" ? AppColorDark.darkPrimary : AppColorLight.lightColor01,
-          statusBarIconBrightness: c == "dark" ? Brightness.light: Brightness.light,
+          statusBarColor: c == "dark" ? AppColorDark.darkPrimary : AppColorLight.lightPrimary,
+          statusBarIconBrightness: c == "dark" ? Brightness.light:Brightness.dark,
         ));
       });
     });
@@ -47,7 +46,8 @@ class AppController extends ChangeNotifier{
   Future<ThemeData> checkTheme() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ThemeData t;
-    String r = prefs.getString("theme") == null ? "light" : prefs.getString("theme");
+    String r = prefs.getString("theme") == null ? "light" : prefs.getString(
+        "theme");
 
     if(r == "light"){
       t = AppStyle.lightTheme;

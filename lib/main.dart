@@ -1,5 +1,6 @@
 import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/assets/styles/style.dart';
+import 'package:bevideo/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'src/controllers/app-controller.dart';
@@ -28,9 +29,9 @@ class BeVideoApp extends StatelessWidget {
           navigatorKey: appProvider.navigatorKey,
           title: AppStyle.appName,
           theme: appProvider.theme,
-          darkTheme: AppStyle.lightTheme,
+          darkTheme: AppStyle.darkTheme,
           initialRoute: '/',
-          onGenerateRoute: RouterSetgo.generateRoute,
+          onGenerateRoute: RouterBeVideo.generateRoute,
           home: WelcomeScreen(),
         );
       }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bevideo/assets/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +35,7 @@ class _SplashScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
+        return;
       },
       child: Scaffold(
         body: Container(
@@ -71,7 +73,7 @@ class _SplashScreenState extends State<WelcomeScreen> {
                 //     ),
                 //   ),
                 // ),
-                SizedBox(width: 40.0)
+                SizedBox(width: 40.0),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(
