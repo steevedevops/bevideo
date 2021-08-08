@@ -11,20 +11,20 @@ class AppStyle{
     fontFamily: fontFamily,
     primarySwatch: BestappUtils.createMaterialColor(Color(0xFF242f40)),
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    primaryColor: AppColorLight.lightColor01,
-    backgroundColor: AppColorLight.lightColor04,
-    accentColor:  AppColorLight.lightColor06,
-    canvasColor: AppColorLight.lightColor03,
-    scaffoldBackgroundColor: AppColorLight.lightColor03,
+    primaryColor: AppColorLight.primaryColor,
+    backgroundColor: AppColorLight.backgroundColor,
+    accentColor:  AppColorLight.secondaryColor,
+    canvasColor: AppColorLight.secondaryColor,
+    scaffoldBackgroundColor: AppColorLight.scaffoldBackgroundColor,
     appBarTheme: AppBarTheme(
       textTheme: TextTheme(
         headline6: TextStyle(
-          color: AppColorLight.lightColor01,
+          color: AppColorLight.primaryColor,
           fontSize: 18
         ),
       )
     ),
-    buttonColor: AppColorLight.lightColor02
+    buttonColor: AppColorLight.primaryColor
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -37,7 +37,7 @@ class AppStyle{
     appBarTheme: AppBarTheme(
       textTheme: TextTheme(
         headline6: TextStyle(
-          color: AppColorLight.lightColor01,
+          color: AppColorLight.primaryColor,
           fontSize: 18
         ),
       )

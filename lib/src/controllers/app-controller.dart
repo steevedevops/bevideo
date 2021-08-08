@@ -31,8 +31,9 @@ class AppController extends ChangeNotifier{
       prefs.setString("theme", c).then((val){
         SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor: c == "dark" ? AppColorDark.darkPrimary : AppColorLight.lightPrimary,
-          statusBarIconBrightness: c == "dark" ? Brightness.light:Brightness.dark,
+          statusBarColor: c == "dark" ? AppColorDark.darkPrimary : AppColorLight.primaryColor,
+          // statusBarIconBrightness: c == "dark" ? Brightness.light :Brightness.dark,
+          statusBarIconBrightness: Brightness.light,
         ));
       });
     });

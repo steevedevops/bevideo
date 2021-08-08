@@ -4,7 +4,8 @@ import 'package:bevideo/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'src/controllers/app-controller.dart';
-import 'src/screen/welcome.dart';
+import 'src/controllers/canais-controller.dart';
+import 'src/screens/welcome.dart';
 
 void main() async{
   await DotEnv.load();
@@ -12,6 +13,7 @@ void main() async{
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => AppController()),
+          ChangeNotifierProvider(create: (_) => CanaisController())
         ],
         child: BeVideoApp(),
       )

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/assets/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,15 +13,8 @@ class _SplashScreenState extends State<WelcomeScreen> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   void nextScreen() async {
-    SharedPreferences prefs = await _prefs;
     Future.delayed(Duration(seconds: 3),() {
-        if(prefs.containsKey('sessionid') && prefs.getString('sessionid') != null){
-          // Navigator.pushReplacementNamed(context, '/homebase');
-        }else{
-          Navigator.pushReplacementNamed(context, '/login');
-          // Navigator.pushReplacementNamed(context, '/homeauth');
-          // Navigator.pushReplacementNamed(context, '/');
-        }
+        Navigator.pushReplacementNamed(context, '/homebase');
       }
     );
   }
@@ -47,7 +41,7 @@ class _SplashScreenState extends State<WelcomeScreen> {
           //     end: Alignment.bottomRight,
           //     )
           // ),
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).backgroundColor,
           // decoration: BoxDecoration(
           //   color: Color(0xff2B3242)
           //   // gradient: LinearGradient(
@@ -62,31 +56,29 @@ class _SplashScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                // Padding(
-                //   padding: const EdgeInsets.all(100.0),
-                //   child: Container(
-                //     height: 180,
-                //     child: new Image.asset(
-                //       'lib/assets/logo/animation_640_kp8b8fxv.gif',
-                //       width: 100.0,
-                //       fit: BoxFit.fill,
-                //     ),
-                //   ),
-                // ),
+                Container(
+                  padding: EdgeInsets.only(left:1.0),
+                  child: SvgPicture.asset(
+                    'lib/assets/logos/logo.svg',
+                    // width: 24,
+                  ),
+                ),
                 SizedBox(width: 40.0),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(
                     top: 15.0,
                   ),
-                  child: Text(
-                    "${AppStyle.appName}",
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w700,
-                      color: Theme.of(context).accentColor,
+                  child:  Container(
+                    child: Text('${AppStyle.appName}',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontFamily: AppStyle.fontFamily,
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).accentColor
+                      ),
                     ),
-                  ),
+                  )
                 ),
               ],
             ),
