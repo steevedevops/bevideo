@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'src/controllers/app-controller.dart';
 import 'src/controllers/canais-controller.dart';
+import 'src/controllers/videos-controller.dart';
 import 'src/screens/welcome.dart';
 
 void main() async{
   await DotEnv.load();
   runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => AppController()),
-          ChangeNotifierProvider(create: (_) => CanaisController())
-        ],
-        child: BeVideoApp(),
-      )
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppController()),
+        ChangeNotifierProvider(create: (_) => CanaisController()),
+        ChangeNotifierProvider(create: (_) => VideosController()),
+      ],
+      child: BeVideoApp(),
+    )
   );
 }
 

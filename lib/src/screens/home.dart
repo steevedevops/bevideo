@@ -2,36 +2,12 @@ import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/assets/styles/style.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/controllers/canais-controller.dart';
+import 'package:bevideo/src/controllers/videos-controller.dart';
+import 'package:bevideo/src/models/filter-model.dart';
+import 'package:bevideo/src/widgets/video-card-shimmer.dart';
+import 'package:bevideo/src/widgets/video-card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-
-class TypeFilterModel {
-  String name;
-  bool isActive;
-  IconData icon;
-
-  TypeFilterModel(
-      {
-      this.name,
-      this.isActive,
-      this.icon
-    });
-
-  TypeFilterModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    isActive = json['isActive'];
-    icon = json['icon'];
-    
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['icon'] = this.icon;
-    data['isActive'] = this.isActive;
-    return data;
-  }
-}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({ Key key }) : super(key: key);
@@ -41,7 +17,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ScrollController _sc = new ScrollController();
+
   bool loadingCanais = false;
+  bool loadingvideos = false;
 
   List<TypeFilterModel> typeFilter = [
     TypeFilterModel(
@@ -65,13 +44,27 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final CanaisController canaisController = Provider.of<CanaisController>(context, listen: false);
+    final VideosController videosController = Provider.of<VideosController>(context, listen: false);
     setState(() {
       loadingCanais = true;
+      loadingvideos = true;
     });
     canaisController.getCanaisMaisPopular(context: context).then((result){
       setState(() {
         loadingCanais = false;
       });
+    });
+
+    videosController.listarVideos(context: context, initial: true).then((result){
+      setState(() {
+        loadingvideos = false;
+      });
+    });
+
+    _sc.addListener(() {
+      if (_sc.position.pixels == _sc.position.maxScrollExtent) {
+        videosController.listarVideos(context: context, initial: false);
+      }
     });
   }
 
@@ -79,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        controller: _sc,
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: Theme.of(context).backgroundColor,
@@ -259,9 +253,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Theme.of(context).accentColor,
-                                image: _.canaisList[index].user.perfil.avatar != null ?
+                                image: _.canaisList[index].capa != null ?
                                 DecorationImage(
-                                  image: NetworkImage("${Config.BASE_URL}${_.canaisList[index].user.perfil.avatar}"),
+                                  image: NetworkImage("${Config.BASE_URL}${_.canaisList[index].capa}"),
                                   fit: BoxFit.cover
                                 ) : null
                               ),
@@ -350,39 +344,52 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             )
           ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 4.0,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
-                  alignment: Alignment.center,
-                  color: Colors.teal[100 * (index % 9)],
-                  child: Text('Grid Item $index'),
-                );
-              },
-              childCount: 20,
-            ),
-          ),
-
-
-          SliverFixedExtentList(
-            itemExtent: 50.0,
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
-                  alignment: Alignment.center,
-                  color: Colors.lightBlue[100 * (index % 9)],
-                  child: Text('List Item $index'),
-                );
-              },
-            ),
-          ),
-
+          loadingvideos ?
+          SliverToBoxAdapter(
+            child: BeShimmer(
+              linearGradient: ShimmerGradient,
+              child: Container(
+                height: 715,
+                padding: const EdgeInsets.only(left:15.0, right: 15.0, top: 15.0),
+                color: Theme.of(context).backgroundColor,
+                child: Column(
+                  children: [
+                    BeShimmerLoading(
+                      isLoading: loadingvideos,
+                      child: VideoCardShimmer(),
+                    ),
+                    SizedBox(height: 20),
+                    BeShimmerLoading(
+                      isLoading: loadingvideos,
+                      child: VideoCardShimmer(),
+                    ),
+                    SizedBox(height: 20),
+                    BeShimmerLoading(
+                      isLoading: loadingvideos,
+                      child: VideoCardShimmer(),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                )
+              ),
+            ) 
+          ) : Consumer<VideosController>(
+            builder: (context, _, child) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left:15.0, right: 15.0, top: 15.0),
+                      child: VideoCard(
+                        video: _.videosList[index],
+                      ),
+                    );
+                  },
+                  childCount: _.videosList.length
+                )
+              );
+            }
+          )
         ],
       ),
     );

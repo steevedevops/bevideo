@@ -3,11 +3,11 @@ class PerfilModel {
   String avatar;
   bool autoplay;
   bool dark;
-  Null pixNome;
-  Null pixCidade;
-  Null pixKey;
-  Null pixCep;
-  Null pixValor;
+  String pixNome;
+  String pixCidade;
+  String pixKey;
+  String pixCep;
+  String pixValor;
 
   PerfilModel(
       {this.user,
