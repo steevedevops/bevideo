@@ -21,13 +21,12 @@ class VideoCard extends StatelessWidget {
               height: 160,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.grey,
-                image: video.capa != null ?
-                DecorationImage(
-                  image: NetworkImage("${Config.BASE_URL}${video.capa}"),
-                  fit: BoxFit.cover
-                ) : null
+                color: Colors.grey[300],
               ),
+              child: BeImageCached(
+                url: "${Config.BASE_URL}${video.capa}",
+                placeholder: beloadCircular(color: Theme.of(context).accentColor),
+              )
             ),
             SizedBox(height: 5),
             Row(

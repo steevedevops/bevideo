@@ -1,10 +1,10 @@
 import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/assets/styles/style.dart';
+import 'package:bevideo/config.dart';
 import 'package:bevideo/src/controllers/canais-controller.dart';
-import 'package:bevideo/src/controllers/videos-controller.dart';
 import 'package:bevideo/src/models/filter-model.dart';
 import 'package:bevideo/src/widgets/video-card-shimmer.dart';
-import 'package:bevideo/src/widgets/video-card.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
@@ -17,10 +17,10 @@ class CanaisScreen extends StatefulWidget {
 }
 
 class _CanaisScreenState extends State<CanaisScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ScrollController _sc = new ScrollController();
 
   bool loadingCanais = false;
-  bool loadingvideos = false;
 
   List<TypeFilterModel> typeFilter = [
     TypeFilterModel(
@@ -44,26 +44,18 @@ class _CanaisScreenState extends State<CanaisScreen> {
   void initState() {
     super.initState();
     final CanaisController canaisController = Provider.of<CanaisController>(context, listen: false);
-    final VideosController videosController = Provider.of<VideosController>(context, listen: false);
     setState(() {
       loadingCanais = true;
-      loadingvideos = true;
     });
-    canaisController.getCanaisMaisPopular(context: context).then((result){
+    canaisController.getTodosCanais(context: context).then((result){
       setState(() {
         loadingCanais = false;
       });
     });
 
-    videosController.listarVideos(context: context, initial: true, order: 'relevant').then((result){
-      setState(() {
-        loadingvideos = false;
-      });
-    });
-
     _sc.addListener(() {
       if (_sc.position.pixels == _sc.position.maxScrollExtent) {
-        videosController.listarVideos(context: context, initial: false);
+        // canaisController.getTodosCanais(context: context, initial: false);
       }
     });
   }
@@ -71,6 +63,7 @@ class _CanaisScreenState extends State<CanaisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: CustomScrollView(
         controller: _sc,
         slivers: <Widget>[
@@ -93,107 +86,113 @@ class _CanaisScreenState extends State<CanaisScreen> {
                 color: Theme.of(context).accentColor
               ),
             ),
-            flexibleSpace: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 80.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          )
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left:1.0),
-                              child: SvgPicture.asset(
-                                'lib/assets/icons/heart.svg',
-                                color: Theme.of(context).accentColor,
-                                width: 24,
-                              ),
+            flexibleSpace: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 1,
+              itemBuilder: (context, index){
+                return Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                              )
                             ),
-                            Text(
-                              ' Vídeos curtidos',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).accentColor,
-                                fontSize: 13
-                              ),
-                            )
-                          ],
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left:1.0),
+                                  child: SvgPicture.asset(
+                                    'lib/assets/icons/heart.svg',
+                                    color: Theme.of(context).accentColor,
+                                    width: 24,
+                                  ),
+                                ),
+                                Text(
+                                  ' Vídeos curtidos',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).accentColor,
+                                    fontSize: 13
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left:1.0),
+                                  child: SvgPicture.asset(
+                                    'lib/assets/icons/hourglass_bottom.svg',
+                                    color: Theme.of(context).accentColor,
+                                    width: 24,
+                                  ),
+                                ),
+                                Text(
+                                  ' Historico',
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              )
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left:1.0),
+                                  child: SvgPicture.asset(
+                                    'lib/assets/icons/clock.svg',
+                                    color: Theme.of(context).accentColor,
+                                    width: 22,
+                                  ),
+                                ),
+                                Text(
+                                  ' Assistir depois',
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left:1.0),
-                              child: SvgPicture.asset(
-                                'lib/assets/icons/hourglass_bottom.svg',
-                                color: Theme.of(context).accentColor,
-                                width: 24,
-                              ),
-                            ),
-                            Text(
-                              ' Historico',
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          )
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left:1.0),
-                              child: SvgPicture.asset(
-                                'lib/assets/icons/clock.svg',
-                                color: Theme.of(context).accentColor,
-                                width: 22,
-                              ),
-                            ),
-                            Text(
-                              ' Assistir depois',
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
             actions: <Widget>[
               IconButton(
@@ -214,62 +213,6 @@ class _CanaisScreenState extends State<CanaisScreen> {
               ),
             ]
           ),
-          // SliverToBoxAdapter(
-          //   child: Container(
-          //     height: 30,
-          //     color: Theme.of(context).scaffoldBackgroundColor,
-          //     child: Padding(
-          //       padding: const EdgeInsets.only(left: 12.0, top: 10),
-          //       child: Text('Canais incrito',
-          //         style: TextStyle(
-          //           fontSize: 15,
-          //           fontWeight: FontWeight.bold,
-          //           color: Theme.of(context).accentColor
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // SliverToBoxAdapter(
-          //   child: Consumer<CanaisController>(
-          //     builder: (context, _, child){
-          //       return Container(
-          //         height: 75,
-          //         color: Theme.of(context).scaffoldBackgroundColor,
-          //         child: BeShimmer(
-          //           linearGradient: ShimmerGradient,
-          //           child: ListView.builder(
-          //             scrollDirection: Axis.horizontal,
-          //             physics: loadingCanais ? const NeverScrollableScrollPhysics() : null,
-          //             itemCount: loadingCanais ? 5 : _.canaisList.length,
-          //             itemBuilder: (context, index){
-          //               return BeShimmerLoading(
-          //                 isLoading: loadingCanais,
-          //                 child: Padding(
-          //                   padding: const EdgeInsets.all(8.0),
-          //                   child: Container(
-          //                     width: 80,
-          //                     height: 80,
-          //                     decoration: BoxDecoration(
-          //                       borderRadius: BorderRadius.circular(15),
-          //                       color: Theme.of(context).accentColor,
-          //                       image: _.canaisList[index].capa != null ?
-          //                       DecorationImage(
-          //                         image: NetworkImage("${Config.BASE_URL}${_.canaisList[index].capa}"),
-          //                         fit: BoxFit.cover
-          //                       ) : null
-          //                     ),
-          //                     child: Text(''),
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //         ),
-          //       );
-          //     },
-          //   )
-          // ),
           SliverToBoxAdapter(
             child: Container(
               height: 20,
@@ -291,7 +234,7 @@ class _CanaisScreenState extends State<CanaisScreen> {
             child: Consumer<CanaisController>(
               builder: (context, _, child){
                 return Container(
-                  height: 50,
+                  height: 55,
                   color: Theme.of(context).backgroundColor,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -345,7 +288,16 @@ class _CanaisScreenState extends State<CanaisScreen> {
               },
             )
           ),
-          loadingvideos ?
+          SliverToBoxAdapter(
+            child: Container(
+              height: 10,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12.0, top: 0),
+              ),
+            ),
+          ),
+          
+          loadingCanais ?
           SliverToBoxAdapter(
             child: BeShimmer(
               linearGradient: ShimmerGradient,
@@ -355,39 +307,266 @@ class _CanaisScreenState extends State<CanaisScreen> {
                 color: Theme.of(context).backgroundColor,
                 child: Column(
                   children: [
-                    BeShimmerLoading(
-                      isLoading: loadingvideos,
-                      child: VideoCardShimmer(),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BeShimmerLoading(
+                            isLoading: true,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: Text(''),
+                            )
+                          )
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: BeShimmerLoading(
+                            isLoading: true,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: Text(''),
+                            ),
+                          ),
+                        )
+                      ]
                     ),
-                    SizedBox(height: 20),
-                    BeShimmerLoading(
-                      isLoading: loadingvideos,
-                      child: VideoCardShimmer(),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BeShimmerLoading(
+                            isLoading: true,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: Text(''),
+                            )
+                          )
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: BeShimmerLoading(
+                            isLoading: true,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: Text(''),
+                            ),
+                          ),
+                        )
+                      ]
                     ),
-                    SizedBox(height: 20),
-                    BeShimmerLoading(
-                      isLoading: loadingvideos,
-                      child: VideoCardShimmer(),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BeShimmerLoading(
+                            isLoading: true,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: Text(''),
+                            )
+                          )
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: BeShimmerLoading(
+                            isLoading: true,
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: Text(''),
+                            ),
+                          ),
+                        )
+                      ]
                     ),
-                    SizedBox(height: 20),
                   ],
                 )
               ),
-            ) 
-          ) : Consumer<VideosController>(
+            )
+          ) : Consumer<CanaisController>(
             builder: (context, _, child) {
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left:15.0, right: 15.0, top: 15.0),
-                      child: VideoCard(
-                        video: _.videosList[index],
-                      ),
-                    );
-                  },
-                  childCount: _.videosList.length
-                )
+              return SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200.0,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: 0.9
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Container(
+                        padding: const EdgeInsets.only(left:10.0, right: 10.0, top: 10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 120,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 90,
+                                    child: BeImageCached(
+                                      url: "${Config.BASE_URL}${_.canaisList[index].banner}",
+                                      sizeIcon: 50,
+                                      radius: 10,
+                                      placeholder: beloadCircular(color: Theme.of(context).accentColor),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 60,
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          child: BeAvatar(
+                                            spacer: 2,
+                                            shape: BeAvatarShape.circle,
+                                            backgroundImage: _.canaisList[index].banner != null ?
+                                            NetworkImage('${Config.BASE_URL}${_.canaisList[index].banner}') : null,
+                                            child: Text('${_.canaisList[index].user.firstName[0]}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 30
+                                              ),
+                                            ),
+                                          )
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(bottom: 5),
+                                          // color: Colors.red,
+                                          child: Text('${_.canaisList[index].nome}',
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: AppStyle.fontFamily,
+                                              color: Theme.of(context).accentColor
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 28,
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.redAccent,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text('INSCREVER-SE',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: AppStyle.fontFamily,
+                                        color: Theme.of(context).scaffoldBackgroundColor
+                                      )
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 65,
+                                    height: 28,
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                      border: Border.all(color: Colors.redAccent)
+                                    ),
+                                    child: Center(
+                                      child: Text('${NumberFormat.compact(locale: 'pt-br').format(_.canaisList[index].inscritos)}')
+                                    )
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Icon(FeatherIcons.trendingUp, size: 17),
+                                  Container(
+                                    child: Text('  Views',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: AppStyle.fontFamily,
+                                        color: Colors.grey
+                                      )
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(' ${NumberFormat.compact(locale: 'pt-br').format(_.canaisList[index].totalViews)}')
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Icon(FeatherIcons.film, size: 17),
+                                  Container(
+                                    child: Text('  Vídeos',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: AppStyle.fontFamily,
+                                        color: Colors.grey
+                                      )
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(' ${NumberFormat.compact(locale: 'pt-br').format(_.canaisList[index].totalVideos)}')
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      );
+                    },
+                    childCount: _.canaisList.length
+                  )
+                
               );
             }
           )

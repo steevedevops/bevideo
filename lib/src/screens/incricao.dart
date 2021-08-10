@@ -92,107 +92,113 @@ class _IncricaoScreenState extends State<IncricaoScreen> {
                 color: Theme.of(context).accentColor
               ),
             ),
-            flexibleSpace: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 80.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          )
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left:1.0),
-                              child: SvgPicture.asset(
-                                'lib/assets/icons/heart.svg',
-                                color: Theme.of(context).accentColor,
-                                width: 24,
-                              ),
+            flexibleSpace: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 1,
+              itemBuilder: (context, index){
+                return Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                              )
                             ),
-                            Text(
-                              ' Vídeos curtidos',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).accentColor,
-                                fontSize: 13
-                              ),
-                            )
-                          ],
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left:1.0),
+                                  child: SvgPicture.asset(
+                                    'lib/assets/icons/heart.svg',
+                                    color: Theme.of(context).accentColor,
+                                    width: 24,
+                                  ),
+                                ),
+                                Text(
+                                  ' Vídeos curtidos',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).accentColor,
+                                    fontSize: 13
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left:1.0),
+                                  child: SvgPicture.asset(
+                                    'lib/assets/icons/hourglass_bottom.svg',
+                                    color: Theme.of(context).accentColor,
+                                    width: 24,
+                                  ),
+                                ),
+                                Text(
+                                  ' Historico',
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              )
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left:1.0),
+                                  child: SvgPicture.asset(
+                                    'lib/assets/icons/clock.svg',
+                                    color: Theme.of(context).accentColor,
+                                    width: 22,
+                                  ),
+                                ),
+                                Text(
+                                  ' Assistir depois',
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left:1.0),
-                              child: SvgPicture.asset(
-                                'lib/assets/icons/hourglass_bottom.svg',
-                                color: Theme.of(context).accentColor,
-                                width: 24,
-                              ),
-                            ),
-                            Text(
-                              ' Historico',
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          )
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left:1.0),
-                              child: SvgPicture.asset(
-                                'lib/assets/icons/clock.svg',
-                                color: Theme.of(context).accentColor,
-                                width: 22,
-                              ),
-                            ),
-                            Text(
-                              ' Assistir depois',
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
             actions: <Widget>[
               IconButton(
@@ -290,7 +296,7 @@ class _IncricaoScreenState extends State<IncricaoScreen> {
             child: Consumer<CanaisController>(
               builder: (context, _, child){
                 return Container(
-                  height: 50,
+                  height: 55,
                   color: Theme.of(context).backgroundColor,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,

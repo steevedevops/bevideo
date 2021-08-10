@@ -9,6 +9,8 @@ class CanaisModel {
   String capa;
   String banner;
   int inscritos;
+  int totalViews;
+  int totalVideos;
   String facebook;
   String twitter;
   String googleplus;
@@ -25,7 +27,9 @@ class CanaisModel {
       this.inscritos,
       this.facebook,
       this.twitter,
+      this.totalViews,
       this.googleplus,
+      this.totalVideos,
       this.categoria});
 
   CanaisModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +43,8 @@ class CanaisModel {
     inscritos = json['inscritos'];
     facebook = json['facebook'];
     twitter = json['twitter'];
+    totalViews = json['total_views'];
+    totalVideos = json['total_videos'];
     googleplus = json['googleplus'];
     categoria = json['Categoria'].cast<int>();
   }
@@ -60,6 +66,8 @@ class CanaisModel {
     data['banner'] = this.banner;
     data['inscritos'] = this.inscritos;
     data['facebook'] = this.facebook;
+    data['total_views'] = this.totalViews;
+    data['total_videos'] = this.totalVideos;
     data['twitter'] = this.twitter;
     data['googleplus'] = this.googleplus;
     data['Categoria'] = this.categoria;
