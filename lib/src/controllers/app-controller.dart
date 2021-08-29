@@ -1,3 +1,4 @@
+import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/assets/styles/colors.dart';
 import 'package:bevideo/assets/styles/style.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +10,6 @@ class AppController extends ChangeNotifier{
   AppController(){
     checkTheme();
   }
-
 
   ThemeData theme = AppStyle.lightTheme;
   Key key = UniqueKey();
@@ -61,3 +61,7 @@ class AppController extends ChangeNotifier{
     return t;
   }
 }
+
+final appController = ChangeNotifierProvider<AppController>((ref){
+  return AppController();
+});

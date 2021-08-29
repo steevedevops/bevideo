@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'src/screens/homebase.dart';
+import 'src/screens/navigator.dart';
 import 'src/screens/welcome.dart';
 
 class RouterBeVideo {
@@ -11,7 +11,7 @@ class RouterBeVideo {
       
       case '/homebase':
         int defineScreen = args as int;
-        return MaterialPageRoute(builder: (_) => HomebaseScreen(defineScreen: defineScreen));
+        return MaterialPageRoute(builder: (_) => NavigatorBar(defineScreen: defineScreen));
       default:
         return _errorRoute();
     }

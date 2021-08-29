@@ -17,6 +17,10 @@ class VideosModel {
   int clicado;
   double relevancia;
   String elenco;
+  bool curtido;
+  bool descurtido;
+  int curtidas;
+  int descurtidas;
 
   VideosModel(
       {this.codigo,
@@ -33,6 +37,10 @@ class VideosModel {
       this.visualizacao,
       this.clicado,
       this.relevancia,
+      this.curtido,
+      this.descurtido,
+      this.curtidas,
+      this.descurtidas,
       this.elenco});
 
   VideosModel.fromJson(Map<String, dynamic> json) {
@@ -55,6 +63,10 @@ class VideosModel {
     visualizacao = json['visualizacao'];
     clicado = json['clicado'];
     relevancia = json['relevancia'];
+    curtido = json['curtido'];
+    descurtido = json['descurtido'];
+    curtidas = json['curtidas'];
+    descurtidas = json['descurtidas'];
     elenco = json['elenco'];
   }
 
@@ -82,7 +94,11 @@ class VideosModel {
     data['visualizacao'] = this.visualizacao;
     data['clicado'] = this.clicado;
     data['relevancia'] = this.relevancia;
+    data['descurtido'] = this.descurtido;
+    data['curtido'] = this.curtido;
     data['elenco'] = this.elenco;
+    data['curtidas'] = this.curtidas;
+    data['descurtidas'] = this.descurtidas;
     return data;
   }
 }

@@ -4,6 +4,11 @@ import 'package:bevideo/config.dart';
 import 'package:bevideo/src/models/videos-model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:miniplayer/miniplayer.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:bevideo/src/controllers/videos-controller.dart';
+import 'package:riverpod/riverpod.dart';
+
 
 class VideoCard extends StatelessWidget {
 
@@ -13,12 +18,16 @@ class VideoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        context.read(selectedVideoProvider).state = video;
+        context.read(miniPlayerControllerProvider).state.animateToHeight(state: PanelState.MAX);
+      },
       child: Container(
         child: Column(
           children: [
             Container(
               width: double.infinity,
-              height: 160,
+              height: 190,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.grey[300],
@@ -78,10 +87,10 @@ class VideoCard extends StatelessWidget {
                               )
                             ),
                           ),
-                          Container(
-                            child: Text(' - ${NumberFormat.compact(locale: 'pt-br').format(video.visualizacao)} views - ${DateFormat.yMMMd().format(DateTime.parse(video.datacadastro))} ${DateFormat.Hm().format(DateTime.parse(video.datacadastro))}',
+                          Expanded(
+                            child: Text(' - ${NumberFormat.compact(locale: 'pt-br').format(video.visualizacao)} views - ${timeago.format(DateTime.parse(video.datacadastro))} ${DateFormat.Hm().format(DateTime.parse(video.datacadastro))}',
                             // ${DateFormat.yMEd().format(DateTime.parse(video.datacadastro))}
-                              maxLines: 2,
+                              maxLines: 1,
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontFamily: AppStyle.fontFamily,
@@ -102,11 +111,4 @@ class VideoCard extends StatelessWidget {
       ),
     );
   }
-
-  String _printDuration(Duration duration) {
-  String twoDigits(int n) => n.toString().padLeft(2, "0");
-  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-}
 }

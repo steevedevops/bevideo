@@ -3,42 +3,43 @@ import 'package:bevideo/assets/styles/style.dart';
 import 'package:bevideo/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:riverpod/riverpod.dart';
 import 'src/controllers/app-controller.dart';
-import 'src/controllers/canais-controller.dart';
-import 'src/controllers/videos-controller.dart';
 import 'src/screens/welcome.dart';
 
+
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError();
+});
 void main() async{
   await DotEnv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AppController()),
-        ChangeNotifierProvider(create: (_) => CanaisController()),
-        ChangeNotifierProvider(create: (_) => VideosController()),
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       ],
-      child: BeVideoApp(),
+      child: BeVideoApp()
     )
   );
 }
 
-class BeVideoApp extends StatelessWidget {
+
+class BeVideoApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return Consumer<AppController>(
-      builder: (BuildContext context, AppController appProvider, Widget child) {
-        return MaterialApp(
-          key: appProvider.key,
-          debugShowCheckedModeBanner: false,
-          navigatorKey: appProvider.navigatorKey,
-          title: AppStyle.appName,
-          theme: appProvider.theme,
-          darkTheme: AppStyle.darkTheme,
-          initialRoute: '/',
-          onGenerateRoute: RouterBeVideo.generateRoute,
-          home: WelcomeScreen(),
-        );
-      }
+  Widget build(BuildContext context, ScopedReader watch) {
+    final appProvider = watch(appController);
+    return MaterialApp(
+      key: appProvider.key,
+      debugShowCheckedModeBanner: false,
+      navigatorKey: appProvider.navigatorKey,
+      title: AppStyle.appName,
+      theme: appProvider.theme,
+      darkTheme: AppStyle.darkTheme,
+      initialRoute: '/',
+      onGenerateRoute: RouterBeVideo.generateRoute,
+      home: WelcomeScreen(),
     );
   }
 }
