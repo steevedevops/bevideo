@@ -5,7 +5,7 @@ import 'package:bevideo/src/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:miniplayer/miniplayer.dart';
-import 'video-detalhes/video-detalhe.dart';
+import 'video-detalhes/detalhes.dart';
 import 'package:bevideo/src/controllers/videos-controller.dart';
 
 class NavigatorBar extends StatefulWidget {
@@ -121,72 +121,73 @@ class _NavigatorBarState extends State<NavigatorBar> {
                       if (selectedVideo == null){
                         return const SizedBox.shrink();
                       }
-                      if(height <= _playerMinHeight + 50){
-                        return Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Image.network(
-                                    '${Config.BASE_URL}${selectedVideo.capa}',
-                                    height: _playerMinHeight - 4.0,
-                                    width: 120.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              selectedVideo.nome,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                              .textTheme
-                                              .caption
-                                              .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                              )
-                                            )
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              selectedVideo.canal.user.getFullName,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption
-                                                  .copyWith(fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.play_arrow),
-                                    onPressed: () {},
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: () => context.read(selectedVideoProvider).state = null
-                                  ),
-                                ],
-                              ),
-                              const LinearProgressIndicator(
-                                value: 0.4,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.red,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
+                      // if(height <= _playerMinHeight + 50){
+                      //   return Container(
+                      //     color: Theme.of(context).scaffoldBackgroundColor,
+                      //     child: Column(
+                      //       children: [
+                      //         Row(
+                      //           children: [
+                      //             Image.network(
+                      //               '${Config.BASE_URL}${selectedVideo.capa}',
+                      //               height: _playerMinHeight - 4.0,
+                      //               width: 120.0,
+                      //               fit: BoxFit.cover,
+                      //             ),
+                      //             Expanded(
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 child: Column(
+                      //                   crossAxisAlignment: CrossAxisAlignment.start,
+                      //                   mainAxisSize: MainAxisSize.min,
+                      //                   children: [
+                      //                     Flexible(
+                      //                       child: Text(
+                      //                         selectedVideo.nome,
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                         style: Theme.of(context)
+                      //                         .textTheme
+                      //                         .caption
+                      //                         .copyWith(
+                      //                           fontWeight: FontWeight.w500,
+                      //                         )
+                      //                       )
+                      //                     ),
+                      //                     Flexible(
+                      //                       child: Text(
+                      //                         selectedVideo.canal.user.getFullName,
+                      //                         overflow: TextOverflow.ellipsis,
+                      //                         style: Theme.of(context)
+                      //                             .textTheme
+                      //                             .caption
+                      //                             .copyWith(fontWeight: FontWeight.w500),
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //             IconButton(
+                      //               icon: const Icon(Icons.play_arrow),
+                      //               onPressed: () {},
+                      //             ),
+                      //             IconButton(
+                      //               icon: const Icon(Icons.close),
+                      //               onPressed: () => context.read(selectedVideoProvider).state = null
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         const LinearProgressIndicator(
+                      //           value: 0.4,
+                      //           valueColor: AlwaysStoppedAnimation<Color>(
+                      //             Colors.red,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   );
+                      // }
+                      // return 
                       return VideoDetalhes();
                     },
                   )

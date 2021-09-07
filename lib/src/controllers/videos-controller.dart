@@ -1,4 +1,5 @@
 import 'package:bestapp_package/bestapp_package.dart';
+import 'package:better_player/better_player.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/models/videos-detail-model.dart';
 import 'package:bevideo/src/models/videos-model.dart';
@@ -6,13 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// aqui acontece a mudanca do selec do video.
 final selectedVideoProvider = StateProvider<VideosModel>((ref) => null);
-
 final miniPlayerControllerProvider = StateProvider.autoDispose<MiniplayerController>((ref) => MiniplayerController());
-// final videoProvider = ChangeNotifierProvider<VideosController>((ref) => VideosController());
 
-
+final betterPlayerControllerProvider = StateProvider.autoDispose<BetterPlayerController>((ref){
+  BetterPlayerConfiguration betterPlayerConfiguration =
+    BetterPlayerConfiguration(
+    aspectRatio: 16 / 9,
+    fit: BoxFit.contain,
+    handleLifecycle: true,
+    autoPlay: true
+  );
+  return BetterPlayerController(betterPlayerConfiguration);
+});
 
 // quando acontece a mudanca do select do video eu fico escutando o que foi mudado para retornar ele em uma fucao futura 
 // para recontruir o widget
@@ -46,6 +53,23 @@ Future<VideosDetailModel> getVideodetailInfo({int pkVideo}) async {
   }
   return null;
 }
+
+
+void setupDataSource({@required BuildContext context, String urlVideo, String thumbNail}) async {
+    // String imageUrl = await Utils.getFileUrl(Constants.logo);
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      urlVideo,
+      notificationConfiguration: BetterPlayerNotificationConfiguration(
+        showNotification: true,
+        title: "Elephant dream",
+        author: "Some author",
+        imageUrl: thumbNail,
+      ),
+    );
+    context.read(betterPlayerControllerProvider).state.setupDataSource(dataSource);
+    // _betterPlayerController.setupDataSource(dataSource);
+  }
 
 class VideosController extends ChangeNotifier{
   // List<VideosModel> _videosList = [];

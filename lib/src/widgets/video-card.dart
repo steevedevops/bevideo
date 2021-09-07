@@ -19,7 +19,9 @@ class VideoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Esta parte de para fazer a mudanc1 das informacoes do video
         context.read(selectedVideoProvider).state = video;
+        setupDataSource(context:  context, thumbNail: video.capa, urlVideo: '${Config.BASE_URL}${video.video}');
         context.read(miniPlayerControllerProvider).state.animateToHeight(state: PanelState.MAX);
       },
       child: Container(
