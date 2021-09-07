@@ -2,10 +2,12 @@ import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/models/canais-model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 final canaisMaisProvider = FutureProvider.autoDispose<List<CanaisModel>>((ref) async => getCanaisMaisPopular());
 Future<List<CanaisModel>> getCanaisMaisPopular({BuildContext context}) async {
-    ApiServices apiServices = new ApiServices('', Config.BASE_URL);
+    ApiServices apiServices = new ApiServices('', baseApiUrl);
 
     var result = await apiServices.callApi(
       context: context,
@@ -34,7 +36,7 @@ class CanaisController extends ChangeNotifier{
   List<CanaisModel> get canaisMaisList => _canaisMaisList;
 
   Future<void> getCanaisMaisPopular({BuildContext context}) async {
-    ApiServices apiServices = new ApiServices('', Config.BASE_URL);
+    ApiServices apiServices = new ApiServices('', baseApiUrl);
 
     var result = await apiServices.callApi(
       context: context,
@@ -55,7 +57,7 @@ class CanaisController extends ChangeNotifier{
   
   
   Future <void> getTodosCanais({@required BuildContext context})async{
-    ApiServices apiServices = new ApiServices('', Config.BASE_URL);
+    ApiServices apiServices = new ApiServices('', baseApiUrl);
      var result = await apiServices.callApi(
       context: context,
       metodo: 'GET',

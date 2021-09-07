@@ -1,4 +1,4 @@
-import 'package:bestapp_package/bestapp_package.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/screens/canais.dart';
 import 'package:bevideo/src/screens/home.dart';
@@ -40,7 +40,6 @@ class _NavigatorBarState extends State<NavigatorBar> {
         width: 300,
         height: 100,
       )
-        // child: VideoPlayerView(urlVideo: 'https://video.besoft.com.br/media/videos/Bras%C3%ADlia_foi_TOMADA_pelos_militares-uzo0q9uMet8.mp4',))
     ];
 
     return WillPopScope(
@@ -150,7 +149,6 @@ class _NavigatorBarState extends State<NavigatorBar> {
                                               .textTheme
                                               .caption
                                               .copyWith(
-                                                // color: Colors.white,
                                                 fontWeight: FontWeight.w500,
                                               )
                                             )

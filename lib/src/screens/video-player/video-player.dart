@@ -31,7 +31,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         widget.urlVideo,
       ),
       onVideoEnd: () {
-        dataManager.skipToNextVideo(Duration(seconds: 5));
+        dataManager.skipToNextVideo(Duration(seconds: 3));
         print('Proximo video ===========>');
       });
       dataManager = DataManager(flickManager: flickManager, urls: []);
@@ -52,11 +52,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     return  VisibilityDetector(
       key: ObjectKey(flickManager),
       onVisibilityChanged: (visibility) {
-        if (visibility.visibleFraction == 0 && this.mounted) {
-          flickManager.flickControlManager?.autoPause();
-        } else if (visibility.visibleFraction == 1) {
-          flickManager.flickControlManager?.autoResume();
-        }
+        // if (visibility.visibleFraction == 0 && this.mounted) {
+        //   flickManager.flickControlManager?.autoPause();
+        // } else if (visibility.visibleFraction == 1) {
+        //   flickManager.flickControlManager?.autoResume();
+        // }
       },
       child: Container(
         child: FlickVideoPlayer(

@@ -2,6 +2,7 @@ import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/controllers/canais-controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CanaisMaisView extends ConsumerWidget {
   const CanaisMaisView({ Key key }) : super(key: key);

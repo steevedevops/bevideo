@@ -17,4 +17,8 @@ class Config{
   static String get GOOGLE_MAP_API_KEY{
     return DotEnv.env['GOOGLE_MAP_API_KEY'];
   }
+  static String get API_VERSION{
+    return DotEnv.env['API_VERSION'];
+  }
 }
+final String baseApiUrl = Config.BASE_URL+Config.API_VERSION;

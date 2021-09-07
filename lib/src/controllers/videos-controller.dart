@@ -4,6 +4,7 @@ import 'package:bevideo/src/models/videos-detail-model.dart';
 import 'package:bevideo/src/models/videos-model.dart';
 import 'package:flutter/material.dart';
 import 'package:miniplayer/miniplayer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // aqui acontece a mudanca do selec do video.
 final selectedVideoProvider = StateProvider<VideosModel>((ref) => null);
@@ -31,7 +32,7 @@ final selectedVideoProviderFuture = FutureProvider.autoDispose<VideosModel>((ref
 });
 
 Future<VideosDetailModel> getVideodetailInfo({int pkVideo}) async {
-  ApiServices apiServices = new ApiServices('', Config.BASE_URL);
+  ApiServices apiServices = new ApiServices('', baseApiUrl);
 
   var result = await apiServices.callApi(
     metodo: 'GET',
@@ -74,7 +75,7 @@ class VideosController extends ChangeNotifier{
 
   // Future <bool> listarVideos({@required BuildContext context, @required bool initial, String order})async{    
   //   await PreferenceUtils.init();
-  //   ApiServices apiServices = new ApiServices(PreferenceUtils.getString('sessionid'), Config.BASE_URL);
+  //   ApiServices apiServices = new ApiServices(PreferenceUtils.getString('sessionid'), baseApiUrl);
     
   //   if (initial){
   //     _videosList = [];
@@ -125,7 +126,7 @@ class VideosController extends ChangeNotifier{
   // }
 
   // Future <VideosModel> getVideoDetalhe({BuildContext context, int codigo})async{
-  //   ApiServices apiServices = new ApiServices('', Config.BASE_URL);
+  //   ApiServices apiServices = new ApiServices('', baseApiUrl);
 
   //   var result = await apiServices.callApi(
   //     context: context,

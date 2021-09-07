@@ -33,55 +33,53 @@ class _VideoDetalhesState extends State<VideoDetalhes> {
     return GestureDetector(
       onTap: () => context.read(miniPlayerControllerProvider).state.animateToHeight(state: PanelState.MAX),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
+        body: Container(
             color: Theme.of(context).scaffoldBackgroundColor,
-            child: Column(
-              // controller: _scrollController,
-              // shrinkWrap: true,
-              children: [
-                Consumer(
-                  builder: (context, watch, _) {
-                    final selectedVideo = watch(selectedVideoProvider).state;
-                    final futureVideodetaileinfo = watch(selectedVideoProviderFuture);
-                    return SafeArea(
-                      child: Column(
-                        children: [
-
-                          futureVideodetaileinfo.when(
-                            data: (videosDetailModel)=> Stack(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  color: Colors.blue,
-                                  child: VideoPlayerView(urlVideo: '${Config.BASE_URL}${videosDetailModel.video}')
-                                ),
-                                IconButton(
-                                  iconSize: 30.0,
-                                  icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).primaryColor),
-                                  onPressed: () => context
-                                      .read(miniPlayerControllerProvider)
-                                      .state
-                                      .animateToHeight(state: PanelState.MIN),
-                                ),
-                              ],
-                            ), 
-                            loading: () => Container(
-                              color: Colors.black,
-                              height: 240,
-                              child: beloadCircular()
-                            ), 
-                            error: (e, stack) => Text('$e')
-                          ),
-                          VideoInfo(video: selectedVideo),
-                        ],
+            child: Consumer(
+              builder: (context, watch, _) {
+                final selectedVideo = watch(selectedVideoProvider).state;
+                final futureVideodetaileinfo = watch(selectedVideoProviderFuture);
+                return SafeArea(
+                  child: Column(
+                    children: [
+                      futureVideodetaileinfo.when(
+                        data: (videosDetailModel)=> Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              color: Colors.blue,
+                              child: VideoPlayerView(urlVideo: '${Config.BASE_URL}${videosDetailModel.video}')
+                            ),
+                            IconButton(
+                              iconSize: 30.0,
+                              icon: Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                              onPressed: () => context
+                                  .read(miniPlayerControllerProvider)
+                                  .state
+                                  .animateToHeight(state: PanelState.MIN),
+                            ),
+                          ],
+                        ), 
+                        loading: () => Container(
+                          color: Colors.black,
+                          height: 240,
+                          child: beloadCircular()
+                        ), 
+                        error: (e, stack) => Text('$e')
                       ),
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
+                      // Text('${selectedVideo.toJson()}'),
+                      Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          height: 100.0,
+                          child: SingleChildScrollView(child: VideoInfo(video: selectedVideo)),
+                        )
+                      )
+                    ],
+                  ),
+                );
+              },
+            )
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:bevideo/assets/styles/style.dart';
 import 'package:bevideo/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'src/controllers/app-controller.dart';
 import 'src/screens/welcome.dart';
 

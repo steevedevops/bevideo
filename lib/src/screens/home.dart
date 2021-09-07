@@ -1,4 +1,5 @@
 import 'package:bestapp_package/bestapp_package.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/controllers/canais-controller.dart';
 import 'package:bevideo/src/controllers/videos-controller.dart';
