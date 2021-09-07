@@ -22,8 +22,8 @@ dependencies:
     path: ../miniplayer
   bestapp_package:
     path: ../bestapp_package
-  beplayer:
-    path: ../beplayer
+  better_player:
+    path: ../betterplayer
 
 dev_dependencies:
   flutter_test:
