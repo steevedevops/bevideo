@@ -1,7 +1,6 @@
 import 'package:bestapp_package/bestapp_package.dart';
 import 'package:bevideo/assets/styles/style.dart';
 import 'package:bevideo/config.dart';
-import 'package:bevideo/src/controllers/player-controller.dart';
 import 'package:bevideo/src/models/videos-model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

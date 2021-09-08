@@ -1,7 +1,6 @@
 import 'package:bestapp_package/bestapp_package.dart';
 import 'package:better_player/better_player.dart';
 import 'package:bevideo/config.dart';
-import 'package:bevideo/src/controllers/player-controller.dart';
 import 'package:bevideo/src/models/videos-detail-model.dart';
 import 'package:bevideo/src/models/videos-model.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final selectedVideoProvider = StateProvider<VideosModel>((ref) => null);
 final miniPlayerControllerProvider = StateProvider.autoDispose<MiniplayerController>((ref) => MiniplayerController());
+final betterPlayerControllerProvider = StateProvider.autoDispose<BetterPlayerController>((ref){
+  BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
+    aspectRatio: 16 / 9,
+    fit: BoxFit.contain,
+    handleLifecycle: true,
+    autoPlay: true,
+    autoDispose: true,
+    autoDetectFullscreenDeviceOrientation: true,
+    // controlsConfiguration: BetterPlayerControlsConfiguration(
+    //   playerTheme: BetterPlayerTheme.custom,
+    //   customControlsBuilder: (controller) => CustomControlsWidget(
+    //     controller: controller,
+    //   )
+    // )
+  );
+  return BetterPlayerController(betterPlayerConfiguration);
+});
 
 // quando acontece a mudanca do select do video eu fico escutando o que foi mudado para retornar ele em uma fucao futura 
 // para recontruir o widget

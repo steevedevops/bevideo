@@ -1,6 +1,3 @@
-import 'package:bestapp_package/bestapp_package.dart';
-import 'package:bevideo/config.dart';
-import 'package:bevideo/src/controllers/player-controller.dart';
 import 'package:bevideo/src/screens/video-player/beplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
