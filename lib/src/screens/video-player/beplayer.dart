@@ -1,45 +1,28 @@
 import 'package:better_player/better_player.dart';
-import 'package:bevideo/src/controllers/videos-controller.dart';
+import 'package:bevideo/src/controllers/player-controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NotificationPlayerPage extends StatefulWidget {
-  final String urlVideo;
-  final String thumbNail;
-  NotificationPlayerPage({this.urlVideo, this.thumbNail});
+class BeVideoPlayer extends StatefulWidget {
+  const BeVideoPlayer({ Key key }) : super(key: key);
+
   @override
-  _NotificationPlayerPageState createState() => _NotificationPlayerPageState();
+  _BeVideoPlayerState createState() => _BeVideoPlayerState();
 }
 
-class _NotificationPlayerPageState extends State<NotificationPlayerPage> {
-  // static BetterPlayerController _betterPlayerController;
-
-  @override
-  void initState() {
-    //   BetterPlayerConfiguration betterPlayerConfiguration =
-    //       BetterPlayerConfiguration(
-    //     aspectRatio: 16 / 9,
-    //     fit: BoxFit.contain,
-    //     handleLifecycle: true,
-    //   );
-    // _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-    // _setupDataSource();
-    super.initState();
-  }
-  // context.read(selectedVideoProvider).state = video;
-  //       context.read(miniPlayerControllerProvider).state.animateToHeight(state: PanelState.MAX);
-
+class _BeVideoPlayerState extends State<BeVideoPlayer> {
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, _) {
-        // final selectedVideo = watch(selectedVideoProvider).state;
-        final betterPlayerController = watch(betterPlayerControllerProvider).state;
-        return AspectRatio(
-          aspectRatio: 16 / 9,
-          child: BetterPlayer(controller: betterPlayerController),
-        );
-      }
+    return Container(
+      child: Consumer(
+        builder: (context, watch, _) {
+          final betterPlayerController = watch(betterPlayerControllerProvider).state;
+          return AspectRatio(
+            aspectRatio: 16 / 9,
+            child: BetterPlayer(controller: betterPlayerController),
+          );
+        }
+      )
     );
   }
 }

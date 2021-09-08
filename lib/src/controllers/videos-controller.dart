@@ -1,6 +1,7 @@
 import 'package:bestapp_package/bestapp_package.dart';
 import 'package:better_player/better_player.dart';
 import 'package:bevideo/config.dart';
+import 'package:bevideo/src/controllers/player-controller.dart';
 import 'package:bevideo/src/models/videos-detail-model.dart';
 import 'package:bevideo/src/models/videos-model.dart';
 import 'package:flutter/material.dart';
@@ -10,33 +11,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final selectedVideoProvider = StateProvider<VideosModel>((ref) => null);
 final miniPlayerControllerProvider = StateProvider.autoDispose<MiniplayerController>((ref) => MiniplayerController());
 
-final betterPlayerControllerProvider = StateProvider.autoDispose<BetterPlayerController>((ref){
-  BetterPlayerConfiguration betterPlayerConfiguration =
-    BetterPlayerConfiguration(
-    aspectRatio: 16 / 9,
-    fit: BoxFit.contain,
-    handleLifecycle: true,
-    autoPlay: true
-  );
-  return BetterPlayerController(betterPlayerConfiguration);
-});
-
 // quando acontece a mudanca do select do video eu fico escutando o que foi mudado para retornar ele em uma fucao futura 
 // para recontruir o widget
 final videoDetaileProvider = FutureProvider.autoDispose<VideosDetailModel>((ref) async {
+  // lee a mudanca da variabel para atualizar o futurebuilder.
   final VideosModel selectedVideo = ref.watch(selectedVideoProvider).state;
+  BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+    BetterPlayerDataSourceType.network,
+    '${Config.BASE_URL}${selectedVideo.video}',
+    notificationConfiguration: BetterPlayerNotificationConfiguration(
+      showNotification: true,
+      title: selectedVideo.nome,
+      author: selectedVideo.canal.nome,
+      imageUrl: '${Config.BASE_URL}${selectedVideo.capa}',
+    ),
+  );
+  ref.read(betterPlayerControllerProvider).state.setupDataSource(dataSource);
+  ref.read(betterPlayerControllerProvider).state.addEventsListener(_handleEvent);
   return getVideodetailInfo(pkVideo: selectedVideo.codigo);
 });
 
-
-// Retorno o video selecionado em uma funcao futura para recontrui o widget do video para pegar as informaceos do zero..
-// nao utilizei o future do detail porque ele demora mais pois e uma consulta no banco.. entao a unica coisa que fiz foi 
-// dar o retorno do video selecionado rapido para recontruir o widget do video
-// ate estudar como usar o reprodutor con riverpod.
-final selectedVideoProviderFuture = FutureProvider.autoDispose<VideosModel>((ref) async {
-  final VideosModel selectedVideo = ref.watch(selectedVideoProvider).state;
-  return selectedVideo;
-});
+void _handleEvent(BetterPlayerEvent event){
+  if(event.betterPlayerEventType == BetterPlayerEventType.finished){
+    print('Video finalizado iniciar nuevo=-============= ');
+  }
+}
 
 Future<VideosDetailModel> getVideodetailInfo({int pkVideo}) async {
   ApiServices apiServices = new ApiServices('', baseApiUrl);
@@ -53,23 +52,6 @@ Future<VideosDetailModel> getVideodetailInfo({int pkVideo}) async {
   }
   return null;
 }
-
-
-void setupDataSource({@required BuildContext context, String urlVideo, String thumbNail}) async {
-    // String imageUrl = await Utils.getFileUrl(Constants.logo);
-    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.network,
-      urlVideo,
-      notificationConfiguration: BetterPlayerNotificationConfiguration(
-        showNotification: true,
-        title: "Elephant dream",
-        author: "Some author",
-        imageUrl: thumbNail,
-      ),
-    );
-    context.read(betterPlayerControllerProvider).state.setupDataSource(dataSource);
-    // _betterPlayerController.setupDataSource(dataSource);
-  }
 
 class VideosController extends ChangeNotifier{
   // List<VideosModel> _videosList = [];

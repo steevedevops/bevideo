@@ -12,13 +12,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class VideoInfo extends ConsumerWidget {
-  final VideosModel video;
-
-  const VideoInfo({
-    Key key,
-    @required this.video,
-  }) : super(key: key);
-
+  // const VideoInfo({
+  //   Key key
+  // }) : super(key: key);
   @override
   Widget build(BuildContext context, watch) {
     final futureVideodetaileinfo = watch(videoDetaileProvider);
