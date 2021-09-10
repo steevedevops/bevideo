@@ -17,12 +17,9 @@ final betterPlayerControllerProvider = StateProvider.autoDispose<BetterPlayerCon
     autoPlay: true,
     autoDispose: true,
     autoDetectFullscreenDeviceOrientation: true,
-    // controlsConfiguration: BetterPlayerControlsConfiguration(
-    //   playerTheme: BetterPlayerTheme.custom,
-    //   customControlsBuilder: (controller) => CustomControlsWidget(
-    //     controller: controller,
-    //   )
-    // )
+    controlsConfiguration: BetterPlayerControlsConfiguration(
+      playerTheme: BetterPlayerTheme.beplayer
+    )
   );
   return BetterPlayerController(betterPlayerConfiguration);
 });
