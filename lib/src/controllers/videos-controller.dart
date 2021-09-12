@@ -3,6 +3,7 @@ import 'package:better_player/better_player.dart';
 import 'package:bevideo/config.dart';
 import 'package:bevideo/src/models/videos-detail-model.dart';
 import 'package:bevideo/src/models/videos-model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,12 +14,21 @@ final betterPlayerControllerProvider = StateProvider.autoDispose<BetterPlayerCon
   BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
     aspectRatio: 16 / 9,
     fit: BoxFit.contain,
-    handleLifecycle: true,
     autoPlay: true,
     autoDispose: true,
     autoDetectFullscreenDeviceOrientation: true,
     controlsConfiguration: BetterPlayerControlsConfiguration(
-      playerTheme: BetterPlayerTheme.beplayer
+      enableQualities: false,
+      enableAudioTracks: false,
+      pipMenuIcon: Icons.picture_in_picture,
+      playerTheme: BetterPlayerTheme.beplayer,
+      playIcon: CupertinoIcons.play_circle,
+      pauseIcon: CupertinoIcons.pause_circle,
+      overflowMenuIcon: Icons.settings,
+      skipBackIcon: CupertinoIcons.gobackward_15,
+      fullscreenEnableIcon: Icons.fullscreen_rounded,
+      fullscreenDisableIcon: Icons.fullscreen_exit_rounded,
+      skipForwardIcon: CupertinoIcons.goforward_15
     )
   );
   return BetterPlayerController(betterPlayerConfiguration);
@@ -29,18 +39,21 @@ final betterPlayerControllerProvider = StateProvider.autoDispose<BetterPlayerCon
 final videoDetaileProvider = FutureProvider.autoDispose<VideosDetailModel>((ref) async {
   // lee a mudanca da variabel para atualizar o futurebuilder.
   final VideosModel selectedVideo = ref.watch(selectedVideoProvider).state;
-  BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-    BetterPlayerDataSourceType.network,
-    '${Config.BASE_URL}${selectedVideo.video}',
-    notificationConfiguration: BetterPlayerNotificationConfiguration(
-      showNotification: true,
-      title: selectedVideo.nome,
-      author: selectedVideo.canal.nome,
-      imageUrl: '${Config.BASE_URL}${selectedVideo.capa}',
-    ),
-  );
-  ref.read(betterPlayerControllerProvider).state.setupDataSource(dataSource);
-  ref.read(betterPlayerControllerProvider).state.addEventsListener(_handleEvent);
+  
+  if(selectedVideo != null ){
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      '${Config.BASE_URL}${selectedVideo.video}',
+      notificationConfiguration: BetterPlayerNotificationConfiguration(
+        showNotification: true,
+        title: selectedVideo.nome,
+        author: selectedVideo.canal.nome,
+        imageUrl: '${Config.BASE_URL}${selectedVideo.capa}',
+      ),
+    );
+    ref.read(betterPlayerControllerProvider).state.setupDataSource(dataSource);
+    ref.read(betterPlayerControllerProvider).state.addEventsListener(_handleEvent);
+  }
   return getVideodetailInfo(pkVideo: selectedVideo.codigo);
 });
 

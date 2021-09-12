@@ -18,7 +18,7 @@ class NavigatorBar extends StatefulWidget {
 
 class _NavigatorBarState extends State<NavigatorBar> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  static const double _playerMinHeight = 60.0;
+  static const double _playerMinHeight = 55.0;
   int _selectedIndex = 0;
 
 
@@ -188,7 +188,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
                       //   );
                       // }
                       // return 
-                      return VideoDetalhes();
+                      return VideoDetalhes(playerMinHeight: _playerMinHeight, height: height);
                     },
                   )
                 )
