@@ -52,16 +52,9 @@ final videoDetaileProvider = FutureProvider.autoDispose<VideosDetailModel>((ref)
       ),
     );
     ref.read(betterPlayerControllerProvider).state.setupDataSource(dataSource);
-    ref.read(betterPlayerControllerProvider).state.addEventsListener(_handleEvent);
   }
   return getVideodetailInfo(pkVideo: selectedVideo.codigo);
 });
-
-void _handleEvent(BetterPlayerEvent event){
-  if(event.betterPlayerEventType == BetterPlayerEventType.finished){
-    print('Video finalizado iniciar nuevo=-============= ');
-  }
-}
 
 Future<VideosDetailModel> getVideodetailInfo({int pkVideo}) async {
   ApiServices apiServices = new ApiServices('', baseApiUrl);
@@ -79,15 +72,17 @@ Future<VideosDetailModel> getVideodetailInfo({int pkVideo}) async {
   return null;
 }
 
+final videoControllerNotifier = ChangeNotifierProvider<VideosController>((ref)=> VideosController());
 class VideosController extends ChangeNotifier{
-  // List<VideosModel> _videosList = [];
-  // List<VideosModel> get videosList => _videosList;
+  
+  List<VideosModel> _videosList = [];
+  List<VideosModel> get videosList => _videosList;
 
   // static String _msgapi;
   // String get msgapi => _msgapi;
 
-  // bool _ultimo = false;
-  // int _currentPage = 1;
+  bool _ultimo = false;
+  int _currentPage = 1;
   // bool get ultimo => _ultimo;
 
   // final MiniplayerController _mplayerController = new MiniplayerController();
@@ -105,57 +100,55 @@ class VideosController extends ChangeNotifier{
   //   _mplayerController.animateToHeight(state: PanelState.MAX);
   // }
 
-  // Future <bool> listarVideos({@required BuildContext context, @required bool initial, String order})async{    
-  //   await PreferenceUtils.init();
-  //   ApiServices apiServices = new ApiServices(PreferenceUtils.getString('sessionid'), baseApiUrl);
+  Future <bool> listarVideos({@required BuildContext context, @required bool initial, String order})async{    
+    await PreferenceUtils.init();
+    ApiServices apiServices = new ApiServices(PreferenceUtils.getString('sessionid'), baseApiUrl);
     
-  //   if (initial){
-  //     _videosList = [];
-  //     _currentPage = 1;
-  //     _ultimo = false;
-  //   }
+    if (initial){
+      _videosList = [];
+      _currentPage = 1;
+      _ultimo = false;
+    }
 
-  //   var params = {
-  //     'page': '${this._currentPage}',
-  //     'order': order != null ? order : ''
-  //   };
+    var params = {
+      'page': '${this._currentPage}',
+      'order': order != null ? order : ''
+    };
     
-  //   var result = await apiServices.callApi(
-  //     context: context,
-  //     metodo: 'GET',
-  //     rota: 'video/',
-  //     params: params
-  //   );
+    var result = await apiServices.callApi(
+      context: context,
+      metodo: 'GET',
+      rota: 'video/',
+      params: params
+    );
 
-  //   if(apiServices.reqSuccess){
-  //     var resultinfo = VideosModel.fromJsonList(result['videos']);      
+    if(apiServices.reqSuccess){
+      var resultinfo = VideosModel.fromJsonList(result['videos']);
+      // if (result['next'] != null) {
+        // print('Next != null');
+      for (var i = 0; i < resultinfo.length; i++) {
+        _videosList.add(resultinfo[i]);
+      } 
+      print('dados');
+      //   _currentPage += 1;
+      // }else if(result['next'] == null){
 
-
-  //     // if (result['next'] != null) {
-  //       // print('Next != null');
-  //     for (var i = 0; i < resultinfo.length; i++) {
-  //       _videosList.add(resultinfo[i]);
-  //     } 
-  //     print('dados');
-  //     //   _currentPage += 1;
-  //     // }else if(result['next'] == null){
-
-  //     //   if(!_ultimo){
-  //     //     print('Next == null');
-  //     //     for (var i = 0; i < resultinfo.length; i++) {
-  //     //       _videosList.add(resultinfo[i]);
-  //     //     } 
-  //     //     _ultimo = true;
-  //     //   }
-  //     // }
-  //     notifyListeners();
-  //     return true;
-  //   }else{
-  //     _msgapi = result['msg'];
-  //     notifyListeners();
-  //     return false;
-  //   }
-  // }
+      //   if(!_ultimo){
+      //     print('Next == null');
+      //     for (var i = 0; i < resultinfo.length; i++) {
+      //       _videosList.add(resultinfo[i]);
+      //     } 
+      //     _ultimo = true;
+      //   }
+      // }
+      notifyListeners();
+      return true;
+    }else{
+      // _msgapi = result['msg'];
+      // notifyListeners();
+      return false;
+    }
+  }
 
   // Future <VideosModel> getVideoDetalhe({BuildContext context, int codigo})async{
   //   ApiServices apiServices = new ApiServices('', baseApiUrl);

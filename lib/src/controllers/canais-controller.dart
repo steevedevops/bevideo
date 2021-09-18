@@ -29,6 +29,7 @@ class CanaisController extends ChangeNotifier{
 
   static String _msgapi;
   String get msgapi => _msgapi;
+  
   List<CanaisModel> _canaisList = [];
   List<CanaisModel> get canaisList => _canaisList;
 

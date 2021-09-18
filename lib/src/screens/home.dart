@@ -46,10 +46,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     setState(() {
       loadingCanais = true;
+      loadingvideos = true;
     });
+    
     context.read(canaisControllerNotifier).getCanaisMaisPopular(context: context).then((value){
       setState(() {
         loadingCanais = false;
+      });
+    });
+
+    context.read(videoControllerNotifier).listarVideos(context: context, initial: true).then((value){
+      setState(() {
+        loadingvideos = false;
       });
     });
 
@@ -67,12 +75,19 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer(
         builder: (context, watch, _) {
           final canaisController = watch(canaisControllerNotifier);
+          final videoController = watch(videoControllerNotifier);
           return RefreshIndicator(
             color: Theme.of(context).primaryColor,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             onRefresh: () {
               setState(() {
                 loadingCanais = true;
+                loadingvideos = true;
+              });
+              context.read(videoControllerNotifier).listarVideos(context: context, initial: true).then((value){
+                setState(() {
+                  loadingvideos = false;
+                });
               });
               return context.read(canaisControllerNotifier).getCanaisMaisPopular(context: context).then((value){
                 setState(() {
@@ -129,7 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.grey[300],
                                 ),
-                                child: BeImageCached(
+                                child: loadingCanais ? 
+                                Container() : BeImageCached(
                                   url: "${Config.BASE_URL}${canaisController.canaisMaisList[index].capa}",
                                   sizeIcon: 50,
                                   placeholder: beloadCircular(color: Theme.of(context).accentColor),
@@ -144,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SliverToBoxAdapter(
                   child: Container(
-                    height: 20,
+                    height: 30,
                     color: Theme.of(context).backgroundColor,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12.0, top: 5),
@@ -216,23 +232,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     },
                 //   )
                 // ),
-                SliverList(
+                loadingvideos ?
+                SliverToBoxAdapter(
+                  child: BeShimmer(
+                    linearGradient: ShimmerGradient,
+                    child: Container(
+                      height: 715,
+                      padding: const EdgeInsets.only(left:15.0, right: 15.0, top: 15.0),
+                      color: Theme.of(context).backgroundColor,
+                      child: Column(
+                        children: [
+                          BeShimmerLoading(
+                            isLoading: loadingvideos,
+                            child: VideoCardShimmer(),
+                          ),
+                          SizedBox(height: 20),
+                          BeShimmerLoading(
+                            isLoading: loadingvideos,
+                            child: VideoCardShimmer(),
+                          ),
+                          SizedBox(height: 20),
+                          BeShimmerLoading(
+                            isLoading: loadingvideos,
+                            child: VideoCardShimmer(),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      )
+                    ),
+                  )
+                ) : SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(left:15.0, right: 15.0, top: 15.0),
                         child: VideoCard(
-                          video: dataVideoList[index],
+                          video: videoController.videosList[index],
                         ),
                       );
                     },
-                    childCount: dataVideoList.length,
+                    childCount: videoController.videosList.length,
                   )
                 )
-
-
-
-
                 // loadingvideos ?
                 // SliverToBoxAdapter(
                 //   child: BeShimmer(
